@@ -46,8 +46,7 @@ fi
 
 # Run compute transformation and registration
 echo "Computing ANTs transformation and registration"
-#./voxel_based_transformation_registration_karst.sh ${t1_sub1_id} ${t1_sub2_id}
-./voxel_based_transformation_registration_karst.sh 615441 615744
+./voxel_based_transformation_registration_karst.sh ${t1_sub1_id} ${t1_sub2_id}
 
 ret=$?
 if [ ! $ret -eq 0 ]; then
