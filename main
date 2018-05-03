@@ -37,16 +37,39 @@ fi
 echo "AFQ conversion to trk"
 matlab -nosplash -nodisplay -r "afqConverter1()";
 
-ret=$?
-if [ ! $ret -eq 0 ]; then
-	echo "AFQ conversion failed"
-	echo $ret > finished
-	exit $ret
-fi
+#ret=$?
+#if [ ! $ret -eq 0 ]; then
+#	echo "AFQ conversion failed"
+#	echo $ret > finished
+#	exit $ret
+#fi
 
 # Run compute transformation and registration
 echo "Computing ANTs transformation and registration"
-./voxel_based_transformation_registration_karst.sh ${t1_sub1_id} ${t1_sub2_id}
+#./voxel_based_transformation_registration_karst.sh ${t1_sub1_id} ${t1_sub2_id}
+
+# Build a fg structure from tck registered with T1
+t1_sub1_id=615441
+t1_sub2_id=615744
+
+while read tract_name; do         
+
+    echo "Tract name: $tract_name"; 
+
+    tck_filename=\'sub-${t1_sub1_id}_space_${t1_sub2_id}_var-ant4t1w_set-${tract_name}_tract.tck\';
+    tract_filename=\'$tract_name\';
+    echo $tck_filename;
+    echo $tract_filename
+    matlab -nosplash -nodisplay -r "my_convert_tck2fg($tck_filename, $tract_filename)";
+    
+done < tract_name_list.txt
+
+matlab -nosplash -nodisplay -r "my_fg_merge()";
+
+# Build a fg structure from tck registered with FA
+#matlab -nosplash -nodisplay -r "my_convert_tck2fg()";
+#matlab -nosplash -nodisplay -r "my_fg_merge()";
+
 
 ret=$?
 if [ ! $ret -eq 0 ]; then
