@@ -1,5 +1,7 @@
 function my_fg_merge()
 
+addpath(genpath('/N/u/hayashis/BigRed2/git/vistasoft'));
+
 fid = fopen('tract_name_list.txt');
 tline = fgetl(fid);
 load(tline);
@@ -14,7 +16,7 @@ while ischar(tline)
     tline = fgetl(fid);
 end
 
-fgWrite(fg_classified(2:end), 'fg_classified', 'mat');
+fgWrite(fg_classified(2:end), 'output', 'mat');
 fclose(fid);
 
 exit;
