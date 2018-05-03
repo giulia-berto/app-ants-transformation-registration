@@ -37,20 +37,20 @@ fi
 echo "AFQ conversion to trk"
 matlab -nosplash -nodisplay -r "afqConverter1()";
 
-#ret=$?
-#if [ ! $ret -eq 0 ]; then
-#	echo "AFQ conversion failed"
-#	echo $ret > finished
-#	exit $ret
-#fi
+ret=$?
+if [ ! $ret -eq 0 ]; then
+	echo "AFQ conversion failed"
+	echo $ret > finished
+	exit $ret
+fi
 
 # Run compute transformation and registration
 echo "Computing ANTs transformation and registration"
-#./voxel_based_transformation_registration_karst.sh ${t1_sub1_id} ${t1_sub2_id}
+./voxel_based_transformation_registration_karst.sh ${t1_sub1_id} ${t1_sub2_id}
 
 # Build a fg structure from tck registered with T1
-t1_sub1_id=615441
-t1_sub2_id=615744
+#t1_sub1_id=615441
+#t1_sub2_id=615744
 
 while read tract_name; do         
 
