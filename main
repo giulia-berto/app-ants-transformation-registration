@@ -22,11 +22,9 @@ export PYTHONPATH=/N/u/brlife/git/nibabel:$PYTHONPATH
 # Check the inputs subject id
 echo "Check the inputs subject id"
 t1_sub1_id=`jq -r '._inputs[0].meta.subject' config.json`
-fa_sub1_id=`jq -r '._inputs[1].meta.subject' config.json`
-afq_sub1_id=`jq -r '._inputs[2].meta.subject' config.json`
-t1_sub2_id=`jq -r '._inputs[3].meta.subject' config.json`
-fa_sub2_id=`jq -r '._inputs[4].meta.subject' config.json`
-if [ $fa_sub1_id == $t1_sub1_id -a $afq_sub1_id == $t1_sub1_id -a $fa_sub2_id == $t1_sub2_id ]; then
+afq_sub1_id=`jq -r '._inputs[1].meta.subject' config.json`
+t1_sub2_id=`jq -r '._inputs[2].meta.subject' config.json`
+if [ $t1_sub1_id == $afq_sub1_id ]; then
 	echo "Inputs subject IDs correctly inserted"
 else
 	echo "Inputs subject IDs incorrectly inserted. Check them again."
@@ -46,17 +44,15 @@ fi
 
 # Run compute transformation and registration
 echo "Computing ANTs transformation and registration"
-./voxel_based_transformation_registration_karst.sh ${t1_sub1_id} ${t1_sub2_id}
+./voxel_based_transformation_registration_t1_karst.sh ${t1_sub1_id} ${t1_sub2_id}
+
 
 # Build a fg structure from tck registered with T1
-#t1_sub1_id=615441
-#t1_sub2_id=615744
-
 while read tract_name; do         
 
     echo "Tract name: $tract_name"; 
 
-    tck_filename=\'sub-${t1_sub1_id}_space_${t1_sub2_id}_var-ant4t1w_set-${tract_name}_tract.tck\';
+    tck_filename=\'tracts_tck/sub-${t1_sub1_id}_space_${t1_sub2_id}_var-ant4t1w_set-${tract_name}_tract.tck\';
     tract_filename=\'$tract_name\';
     echo $tck_filename;
     echo $tract_filename
@@ -64,11 +60,11 @@ while read tract_name; do
     
 done < tract_name_list.txt
 
+# Merge the fg structures and create the files for the wmc structure
+echo "Creating the WMC structure"
+output_filename=${t1_sub1_id}_space_${t1_sub2_id}'_var-partial_tract.tck';
+python build_partial_tractogram.py -tracts_tck_dir 'tracts_tck' -out ${output_filename};
 matlab -nosplash -nodisplay -r "my_fg_merge()";
-
-# Build a fg structure from tck registered with FA
-#matlab -nosplash -nodisplay -r "my_convert_tck2fg()";
-#matlab -nosplash -nodisplay -r "my_fg_merge()";
 
 
 ret=$?

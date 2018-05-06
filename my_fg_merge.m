@@ -20,8 +20,6 @@ fgWrite(fg_classified(2:end), 'output', 'mat');
 fclose(fid);
 
 s = load('fg_classified.mat');
-%s = rmfield(s,'coordinateSpace');
-%s = rmfield(s,'versionNum');
 fg_classified = s.fg;
 
 names = {};
