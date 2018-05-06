@@ -2,8 +2,8 @@ function my_convert_tck2fg(tck_filename, tract_name)
 
 addpath(genpath('/N/u/hayashis/BigRed2/git/vistasoft'));
 
-fg = dtiImportFibersMrtrix_local(tck_filename, 0.2, 0.5);
-fgWrite(fg, tract_name, 'mat');
+fg_classified = dtiImportFibersMrtrix_local(tck_filename, 0.2, 0.5);
+fgWrite(fg_classified, tract_name, 'mat');
 
 exit;
 end
