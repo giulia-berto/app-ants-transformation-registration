@@ -10,21 +10,21 @@ addpath(genpath('/N/dc2/projects/lifebid/code/kitchell/wma'))
 fid = fopen('tract_name_list.txt');
 tline = fgetl(fid);
 load(tline);
-fg_classified=fg;
+fg_class=fg;
 
 while ischar(tline)
     disp(tline);
     load(tline);
     new_name = strrep(tline,'_',' ');
     fg.name = new_name;
-    fg_classified = [fg_classified, fg];
+    fg_class = [fg_class, fg];
     tline = fgetl(fid);
 end
 
-fgWrite(fg_classified(2:end), 'output', 'mat');
+fgWrite(fg_class(2:end), 'fg_output', 'mat');
 fclose(fid);
 
-s = load('fg_classified.mat');
+s = load('fg_output.mat');
 fg_classified = s.fg;
 
 names = {};
