@@ -55,9 +55,16 @@ while read tract_name; do
     tck_filename=\'tracts_tck/sub-${t1_sub1_id}_space_${t1_sub2_id}_var-ant4t1w_set-${tract_name}_tract.tck\';
     tract_filename=\'$tract_name\';
     echo $tck_filename;
-    echo $tract_filename
+    echo $tract_filename;
     matlab -nosplash -nodisplay -r "my_convert_tck2fg($tck_filename, $tract_filename)";
-    
+
+    if [ -f $tract_name'.mat' ]; then 
+    	echo "tck2fg conversion done."
+    else 
+	echo "tck2fg conversion failed."
+	exit 1
+    fi
+
 done < tract_name_list.txt
 
 # Merge the fg structures and create the files for the wmc structure
@@ -66,12 +73,12 @@ output_filename=${t1_sub1_id}_space_${t1_sub2_id}'_var-partial_tract.tck';
 python build_partial_tractogram.py -tracts_tck_dir 'tracts_tck' -out ${output_filename};
 matlab -nosplash -nodisplay -r "my_fg_merge()";
 
-
-ret=$?
-if [ ! $ret -eq 0 ]; then
-	echo "DSC computation failed"
-	echo $ret > finished
-	exit $ret
+if [ -f 'output.mat' ]; then 
+    	echo "WCM structure created."
+else 
+	echo "WCM structure missing."
+	exit 1
 fi
+
 
 echo "Complete"
