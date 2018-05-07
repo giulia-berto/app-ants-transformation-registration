@@ -1,6 +1,11 @@
 function my_fg_merge()
 
 addpath(genpath('/N/u/hayashis/BigRed2/git/vistasoft'));
+addpath(genpath('/N/u/brlife/git/encode'))
+addpath(genpath('/N/u/brlife/git/jsonlab'))
+addpath(genpath('/N/u/kitchell/Karst/Applications/mba'))
+addpath(genpath('/N/soft/mason/SPM/spm8'))
+addpath(genpath('/N/dc2/projects/lifebid/code/kitchell/wma'))
 
 fid = fopen('tract_name_list.txt');
 tline = fgetl(fid);
