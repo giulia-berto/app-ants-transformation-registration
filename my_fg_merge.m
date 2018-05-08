@@ -47,8 +47,10 @@ mkdir('tracts');
 %cm = parula(length(tracts));
 cm = distinguishable_colors(length(tracts));
 for it = 1:length(tracts)
-   tract.name   = strrep(tracts(it).name, '_', ' ');
+   tract.name = strrep(tracts(it).name, '_', ' ');
+   tract.name = sprintf('Tract %s', tract.name) %trick for visualization
    all_tracts(it).name = strrep(tracts(it).name, '_', ' ');
+   all_tracts(it).name = sprintf('Tract %s', all_tracts(it).name) %trick for visualization
    all_tracts(it).color = cm(it,:);
    tract.color  = cm(it,:);
 
